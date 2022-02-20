@@ -1,0 +1,6 @@
+en:
+  error_failure_invalid_template: Please fix the Mail body.
+  label_template: Template
+  mail_template: Mail Template
+  permission_edit_mail_template: Edit Mail Template
+  project_module_mail_template: Mail Template

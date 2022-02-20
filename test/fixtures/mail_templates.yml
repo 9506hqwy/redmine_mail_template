@@ -1,0 +1,5 @@
+mail_templates_001:
+  project_id: 5
+  tracker_id: 2
+  notifiable: a
+  template: b

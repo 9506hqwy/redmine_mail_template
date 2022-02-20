@@ -1,0 +1,6 @@
+ja:
+  error_failure_invalid_template: メール本文を修正してください。
+  label_template: テンプレート
+  mail_template: メールテンプレート
+  permission_edit_mail_template: メールテンプレート編集
+  project_module_mail_template: メールテンプレート
