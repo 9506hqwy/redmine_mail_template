@@ -8,7 +8,7 @@ class CreateMailTemplates < RedmineMailTemplate::Utils::Migration
       t.belongs_to :tracker, foreign_key: true
       t.string :template, null: false
 
-      t.index [:project_id, :notifiable], name: 'mail_template_by_notifiable', unique: true
+      t.index [:project_id, :notifiable, :tracker_id], name: 'mail_template_by_notifiable', unique: true
     end
   end
 end
