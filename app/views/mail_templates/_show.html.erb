@@ -32,11 +32,11 @@
     <label for="mail_template_template"><%= l(:label_template) %>:</label>
     <%= text_area_tag('mail_template_template', template.template, rows: 16) %>
   </p>
-
-  <p>
-    <%= submit_tag(l(:button_save)) %>
-  </p>
 </div>
+
+<p>
+  <%= submit_tag(l(:button_save)) %>
+</p>
 
 <% end %> <!-- form_tag -->
 
