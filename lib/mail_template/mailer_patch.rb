@@ -11,7 +11,7 @@ module RedmineMailTemplate
         return @attachments.first.container.project
       elsif @news
         return @news.project
-      elsif @message
+      elsif @message && @message.is_a?(Message)
         return @message.project
       elsif @wiki_content
         return @wiki_content.project
@@ -53,7 +53,7 @@ module RedmineMailTemplate
         'news_comment_added'
       elsif @news
         'news_added'
-      elsif @message
+      elsif @message && @message.is_a?(Message)
         'message_posted'
       elsif @wiki_content
         if @wiki_content.version == 1
