@@ -36,7 +36,6 @@ module RedmineMailTemplate
 
     def notifiable
       if @journal
-        # TODO
         'issue_updated'
       elsif @issue
         'issue_added'

@@ -1,7 +1,7 @@
 <!-- プロジェクト設定のタブ表示 -->
 <%
   trackers = @project.trackers
-  notifiables = Redmine::Notifiable.all
+  notifiables = Redmine::Notifiable.all.select { |n| n.parent.blank? }
   templates = @project.mail_template.all
   template = templates.first || MailTemplate.new
 %>
