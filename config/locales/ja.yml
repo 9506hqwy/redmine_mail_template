@@ -1,6 +1,10 @@
 ja:
   error_failure_invalid_template: メール本文を修正してください。
-  label_template: テンプレート
+  hint_mail_template_html_field: |
+    HTML 形式の設定を省略した場合はプレインテキスト形式が使用されます。
+  label_template_html: HTML
+  label_template_mail_body: メール本文
+  label_template_plain_text: プレインテキスト
   mail_template: メールテンプレート
   permission_edit_mail_template: メールテンプレート編集
   project_module_mail_template: メールテンプレート

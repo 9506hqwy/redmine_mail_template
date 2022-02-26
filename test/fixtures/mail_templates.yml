@@ -3,3 +3,4 @@ mail_templates_001:
   tracker_id: 2
   notifiable: a
   template: b
+  html:

@@ -3,35 +3,45 @@
   trackers = @project.trackers
   notifiables = Redmine::Notifiable.all.select { |n| n.parent.blank? }
   templates = @project.mail_template.all
-  template = templates.first || MailTemplate.new
+  @template = templates.first || MailTemplate.new
+
+  tab_plain_text = {
+   name: 'mail_template_plain_text',
+   partial: 'mail_templates/show_plain_text',
+   label: :label_template_plain_text,
+  }
+  tab_html = {
+   name: 'mail_template_html',
+   partial: 'mail_templates/show_html',
+   label: :label_template_html,
+  }
+  tabs = [tab_plain_text]
+  tabs << tab_html unless Setting.plain_text_mail?
 %>
 
 <%= form_tag({controller: :mail_templates, action: :update, project_id: @project.id},
              id: 'mail_template',
              method: 'PUT') do %>
 
-<div class="box tabular settings">
+<div class="box tabular">
   <p>
     <label for="mail_template_notifiable"><%= l(:field_mail_notification) %>:</label>
     <%= select_tag('mail_template_notifiable',
                    options_for_select(notifiables.map { |n| [l_or_humanize(n.name, prefix: 'label_'), n.name] },
-                                      template.notifiable),
-                   onchange: 'changeTracker(); changeTemplate();') %>
+                                      @template.notifiable),
+                   onchange: 'changeTracker(); changeTemplate(); showFirstTab();') %>
   </p>
 
   <p>
     <label for="mail_template_tracker_id"><%= l(:field_tracker) %>:</label>
     <%= select_tag('mail_template_tracker_id',
                    options_for_select(trackers.map { |t| [t.name, t.id] },
-                                      template.tracker_id),
+                                      @template.tracker_id),
                    include_blank: true,
-                   onchange: 'changeTemplate();') %>
+                   onchange: 'changeTemplate(); showFirstTab();') %>
   </p>
 
-  <p>
-    <label for="mail_template_template"><%= l(:label_template) %>:</label>
-    <%= text_area_tag('mail_template_template', template.template, rows: 16) %>
-  </p>
+  <%= render_tabs(tabs) %>
 </div>
 
 <p>
@@ -72,15 +82,39 @@
     let template = document.getElementById('mail_template_template');
     template.value = '';
 
+    let html = document.getElementById('mail_template_html');
+    if (html) {
+      html.value = '';
+    }
+
     for (let i = 0; i < mailTemplates.length; i++) {
       if (mailTemplates[i].notifiable == notifiable && mailTemplates[i].tracker_id == tracker_id) {
         template.value = mailTemplates[i].template;
+
+        if (html) {
+          html.value = mailTemplates[i].html;
+        }
+
         break;
       }
     }
   }
 
+  function showFirstTab() {
+    // hide `tabs-buttons` explicitly because the first tab is in-visible.
+    displayTabsButtons();
+
+    showTab('<%= tabs[0][:name] %>', this.href);
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tab-mail_template').addEventListener('click', function() {
+      showFirstTab();
+    });
+
     changeTracker();
+
+    // nested tab does not work at first view.
+    showFirstTab();
   });
 </script>

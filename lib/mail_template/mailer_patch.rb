@@ -82,7 +82,11 @@ module RedmineMailTemplate
         mail_without_mail_template headers do |format|
           # rubocop:disable Rails/RenderInline
           format.text { render inline: setting.template }
-          format.html { render inline: setting.template } unless Setting.plain_text_mail?
+          unless Setting.plain_text_mail?
+            inline = setting.html
+            inline = setting.template if inline.blank?
+            format.html { render inline: inline }
+          end
           # rubocop:enable Rails/RenderInline
         end
       else
@@ -101,7 +105,11 @@ module RedmineMailTemplate
         super headers do |format|
           # rubocop:disable Rails/RenderInline
           format.text { render inline: setting.template }
-          format.html { render inline: setting.template } unless Setting.plain_text_mail?
+          unless Setting.plain_text_mail?
+            inline = setting.html
+            inline = setting.template if inline.blank?
+            format.html { render inline: inline }
+          end
           # rubocop:enable Rails/RenderInline
         end
       else

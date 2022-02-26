@@ -45,6 +45,7 @@ class MailTemplatesControllerTest < Redmine::ControllerTest
     project.reload
     m = project.mail_template.find { |m| m.tracker_id == 1 && m.notifiable == 'a' }
     assert_equal 'b', m.template
+    assert_nil m.html
   end
 
   def test_update_update
@@ -56,6 +57,7 @@ class MailTemplatesControllerTest < Redmine::ControllerTest
       mail_template_tracker_id: '2',
       mail_template_notifiable: 'c',
       mail_template_template: 'd',
+      mail_template_html: 'e',
     }
 
     assert_redirected_to "/projects/#{project.identifier}/settings/mail_template"
@@ -65,6 +67,7 @@ class MailTemplatesControllerTest < Redmine::ControllerTest
     project.reload
     m = project.mail_template.find { |m| m.tracker_id == 2 && m.notifiable == 'c' }
     assert_equal 'd', m.template
+    assert_equal 'e', m.html
   end
 
   def test_update_destroy
@@ -75,6 +78,7 @@ class MailTemplatesControllerTest < Redmine::ControllerTest
       project_id: project.id,
       mail_template_tracker_id: '2',
       mail_template_notifiable: 'a',
+      mail_template_html: 'e',
     }
 
     assert_redirected_to "/projects/#{project.identifier}/settings/mail_template"
@@ -109,7 +113,25 @@ class MailTemplatesControllerTest < Redmine::ControllerTest
       project_id: project.id,
       mail_template_tracker_id: '1',
       mail_template_notifiable: 'a',
-      mail_template_template: '<%= for %>'
+      mail_template_template: '<%= for %>',
+      mail_template_html: 'c',
+    }
+
+    assert_redirected_to "/projects/#{project.identifier}/settings/mail_template"
+    assert_nil flash[:notice]
+    assert_not_nil flash[:error]
+  end
+
+  def test_update_invalid_html
+    project = Project.find(1)
+    project.enable_module!(:mail_template)
+
+    put :update, params: {
+      project_id: project.id,
+      mail_template_tracker_id: '1',
+      mail_template_notifiable: 'a',
+      mail_template_template: 'b',
+      mail_template_html: '<%= for %>',
     }
 
     assert_redirected_to "/projects/#{project.identifier}/settings/mail_template"

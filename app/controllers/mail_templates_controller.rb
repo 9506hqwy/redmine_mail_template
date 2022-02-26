@@ -7,6 +7,7 @@ class MailTemplatesController < ApplicationController
     tracker_id = params[:mail_template_tracker_id].to_i if params[:mail_template_tracker_id].present?
     notifiable = params[:mail_template_notifiable]
     template = params[:mail_template_template]
+    html = params[:mail_template_html]
 
     setting = @project.mail_template.find { |m| m.tracker_id == tracker_id && m.notifiable == notifiable }
     if template.blank? && setting.blank?
@@ -15,7 +16,8 @@ class MailTemplatesController < ApplicationController
       if setting.destroy
         flash[:notice] = l(:notice_successful_update)
       end
-    elsif !validate_template?(template)
+    elsif !validate_template?(template) ||
+        (html.present? && !validate_template?(html))
       flash[:error] = l(:error_failure_invalid_template)
     else
       setting ||= MailTemplate.new
@@ -23,6 +25,7 @@ class MailTemplatesController < ApplicationController
       setting.tracker_id = tracker_id
       setting.notifiable = notifiable
       setting.template = template
+      setting.html = html
       if setting.save
         flash[:notice] = l(:notice_successful_update)
       end

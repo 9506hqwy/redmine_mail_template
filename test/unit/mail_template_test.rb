@@ -15,6 +15,7 @@ class MailTemplateTest < ActiveSupport::TestCase
     m.tracker = t
     m.notifiable = 'a'
     m.template = 'b'
+    m.html = nil
     m.save!
 
     m.reload
@@ -22,5 +23,6 @@ class MailTemplateTest < ActiveSupport::TestCase
     assert_equal t.id, m.tracker_id
     assert_equal 'a', m.notifiable
     assert_equal 'b', m.template
+    assert_nil m.html
   end
 end

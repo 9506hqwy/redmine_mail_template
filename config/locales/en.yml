@@ -1,6 +1,10 @@
 en:
   error_failure_invalid_template: Please fix the Mail body.
-  label_template: Template
+  hint_mail_template_html_field: |
+    If omitted, use plain text format.
+  label_template_html: HTML
+  label_template_mail_body: Mail body
+  label_template_plain_text: Plain Text
   mail_template: Mail Template
   permission_edit_mail_template: Edit Mail Template
   project_module_mail_template: Mail Template

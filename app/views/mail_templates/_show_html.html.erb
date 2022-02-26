@@ -1,0 +1,8 @@
+<p>
+  <label for="mail_template_html"><%= l(:label_template_mail_body) %>:</label>
+  <%= text_area_tag('mail_template_html', @template.html, rows: 16) %>
+</p>
+
+<p>
+  <%= l(:hint_mail_template_html_field) %>
+</p>
