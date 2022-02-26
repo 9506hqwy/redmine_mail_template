@@ -16,7 +16,7 @@ class DocumentsTest < Redmine::IntegrationTest
            :users
 
   def setup
-    Setting.plain_text_mail = true
+    Setting.plain_text_mail = 1
     Setting.notified_events = ['document_added']
     ActionMailer::Base.deliveries.clear
 
@@ -43,7 +43,7 @@ class DocumentsTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_document_add_template
@@ -64,6 +64,6 @@ class DocumentsTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 end

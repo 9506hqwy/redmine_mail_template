@@ -18,7 +18,7 @@ class MessagesTest < Redmine::IntegrationTest
            :watchers
 
   def setup
-    Setting.plain_text_mail = true
+    Setting.plain_text_mail = 1
     Setting.notified_events = ['message_posted']
     ActionMailer::Base.deliveries.clear
 
@@ -44,7 +44,7 @@ class MessagesTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_message_posted_template
@@ -64,6 +64,6 @@ class MessagesTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 end

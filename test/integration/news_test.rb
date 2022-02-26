@@ -17,7 +17,7 @@ class NewssTest < Redmine::IntegrationTest
            :users
 
   def setup
-    Setting.plain_text_mail = true
+    Setting.plain_text_mail = 1
     Setting.notified_events = ['news_added', 'news_comment_added']
     ActionMailer::Base.deliveries.clear
 
@@ -50,7 +50,7 @@ class NewssTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_news_add_template
@@ -71,7 +71,7 @@ class NewssTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_news_comment_add
@@ -86,7 +86,7 @@ class NewssTest < Redmine::IntegrationTest
       })
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_news_comment_add_template
@@ -103,6 +103,6 @@ class NewssTest < Redmine::IntegrationTest
       })
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 end

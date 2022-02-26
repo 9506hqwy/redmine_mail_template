@@ -19,7 +19,7 @@ class WikiTest < Redmine::IntegrationTest
            :wikis
 
   def setup
-    Setting.plain_text_mail = true
+    Setting.plain_text_mail = 1
     Setting.notified_events = ['wiki_content_added', 'wiki_content_updated']
     ActionMailer::Base.deliveries.clear
 
@@ -50,7 +50,7 @@ class WikiTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_wiki_content_added_template
@@ -69,7 +69,7 @@ class WikiTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_wiki_content_updated
@@ -84,7 +84,7 @@ class WikiTest < Redmine::IntegrationTest
       })
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_wiki_content_updated_template
@@ -101,6 +101,6 @@ class WikiTest < Redmine::IntegrationTest
       })
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 end

@@ -20,7 +20,7 @@ class IssuesTest < Redmine::IntegrationTest
            :watchers
 
   def setup
-    Setting.plain_text_mail = true
+    Setting.plain_text_mail = 1
     Setting.notified_events = ['issue_added', 'issue_updated']
     ActionMailer::Base.deliveries.clear
 
@@ -54,7 +54,7 @@ class IssuesTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_issue_add_template
@@ -76,7 +76,7 @@ class IssuesTest < Redmine::IntegrationTest
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_issue_edit
@@ -92,7 +92,7 @@ class IssuesTest < Redmine::IntegrationTest
 
     # FIXME: 0 at test only in Redmine3
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
   def test_issue_edit_template
@@ -110,6 +110,6 @@ class IssuesTest < Redmine::IntegrationTest
 
     # FIXME: 0 at test only in Redmine3
     assert_not_equal 0, ActionMailer::Base.deliveries.length
-    assert_equal @template.template, ActionMailer::Base.deliveries[0].parts.first.body.encoded
+    assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 end
