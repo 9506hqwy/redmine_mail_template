@@ -2,7 +2,9 @@
 
 module RedmineMailTemplate
   module MailerPatch
-    def find_project_by_container
+    private
+
+    def mail_template_find_project_by_container
       if @issue
         return @issue.project
       elsif @document
@@ -20,21 +22,25 @@ module RedmineMailTemplate
       nil
     end
 
-    def find_setting_by_project(project)
+    def mail_template_find_setting_by_project(project)
       return nil unless project
       return nil unless project.module_enabled?(:mail_template)
-      return nil unless notifiable
+      return nil unless mail_template_notifiable
 
       tracker_id = @issue.tracker_id if @issue
-      setting = project.mail_template.where(notifiable: notifiable, tracker_id: tracker_id).first
-      setting = project.mail_template.where(notifiable: notifiable, tracker_id: nil).first if setting.blank? && @issue
+      setting = project.mail_template
+        .where(notifiable: mail_template_notifiable, tracker_id: tracker_id)
+        .first
+      if setting.blank? && @issue
+        setting = project.mail_template
+          .where(notifiable: mail_template_notifiable, tracker_id: nil)
+          .first
+      end
 
       setting
     end
 
-    private
-
-    def notifiable
+    def mail_template_notifiable
       if @journal
         'issue_updated'
       elsif @issue
@@ -76,8 +82,8 @@ module RedmineMailTemplate
     end
 
     def mail_with_mail_template(headers={}, &block)
-      project = find_project_by_container
-      setting = find_setting_by_project(project)
+      project = mail_template_find_project_by_container
+      setting = mail_template_find_setting_by_project(project)
       if setting
         mail_without_mail_template headers do |format|
           # rubocop:disable Rails/RenderInline
@@ -99,8 +105,8 @@ module RedmineMailTemplate
     include MailerPatch
 
     def mail(headers={}, &block)
-      project = find_project_by_container
-      setting = find_setting_by_project(project)
+      project = mail_template_find_project_by_container
+      setting = mail_template_find_setting_by_project(project)
       if setting
         super headers do |format|
           # rubocop:disable Rails/RenderInline
