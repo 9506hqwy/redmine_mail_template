@@ -5,6 +5,7 @@ en:
   label_template_html: HTML
   label_template_mail_body: Mail body
   label_template_plain_text: Plain Text
+  label_template_tracker_all: All
   mail_template: Mail Template
   permission_edit_mail_template: Edit Mail Template
   project_module_mail_template: Mail Template

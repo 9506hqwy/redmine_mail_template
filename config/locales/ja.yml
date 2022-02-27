@@ -5,6 +5,7 @@ ja:
   label_template_html: HTML
   label_template_mail_body: メール本文
   label_template_plain_text: プレインテキスト
+  label_template_tracker_all: すべて
   mail_template: メールテンプレート
   permission_edit_mail_template: メールテンプレート編集
   project_module_mail_template: メールテンプレート

@@ -29,15 +29,14 @@
     <%= select_tag('mail_template_notifiable',
                    options_for_select(notifiables.map { |n| [l_or_humanize(n.name, prefix: 'label_'), n.name] },
                                       @template.notifiable),
-                   onchange: 'changeTracker(); changeTemplate(); showFirstTab();') %>
+                   onchange: 'changeTracker(); changeTrackerConfigured(); changeTemplate(); showFirstTab();') %>
   </p>
 
   <p>
     <label for="mail_template_tracker_id"><%= l(:field_tracker) %>:</label>
     <%= select_tag('mail_template_tracker_id',
-                   options_for_select(trackers.map { |t| [t.name, t.id] },
+                   options_for_select([[l(:label_template_tracker_all), '']] + trackers.map { |t| [t.name, t.id] },
                                       @template.tracker_id),
-                   include_blank: true,
                    onchange: 'changeTemplate(); showFirstTab();') %>
   </p>
 
@@ -57,6 +56,18 @@
   <% end %>
   ];
 
+  function changeNotifiableConfigured() {
+    let options = document.getElementById('mail_template_notifiable').querySelectorAll('option');
+    for (let i = 0; i < options.length; i++) {
+      options[i].style = null;
+
+      let configured = mailTemplates.find(t => t.notifiable === options[i].value);
+      if (configured) {
+        options[i].style = 'color: orange;';
+      }
+    }
+  }
+
   function changeTracker() {
     let notifiable = document.getElementById('mail_template_notifiable').value;
 
@@ -68,6 +79,20 @@
     else {
       tracker.value = '';
       tracker.disabled = true;
+    }
+  }
+
+  function changeTrackerConfigured() {
+    let notifiable = document.getElementById('mail_template_notifiable').value;
+    let options = document.getElementById('mail_template_tracker_id').querySelectorAll('option');
+    for (let i = 0; i < options.length; i++) {
+      options[i].style = null;
+
+      let configured = mailTemplates.find(t =>
+        t.notifiable === notifiable && (t.tracker_id || '') == options[i].value);
+      if (configured) {
+        options[i].style = 'color: orange;';
+      }
     }
   }
 
@@ -111,6 +136,10 @@
     document.getElementById('tab-mail_template').addEventListener('click', function() {
       showFirstTab();
     });
+
+    changeNotifiableConfigured();
+
+    changeTrackerConfigured();
 
     changeTracker();
 
