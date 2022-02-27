@@ -29,7 +29,7 @@
     <%= select_tag('mail_template_notifiable',
                    options_for_select(notifiables.map { |n| [l_or_humanize(n.name, prefix: 'label_'), n.name] },
                                       @template.notifiable),
-                   onchange: 'changeTracker(); changeTrackerConfigured(); changeTemplate(); showFirstTab();') %>
+                   onchange: 'changeMailTemplateTracker(); changeMailTemplateTrackerConfigured(); changeMailTemplate(); showMailTemplateFirstTab();') %>
   </p>
 
   <p>
@@ -37,7 +37,7 @@
     <%= select_tag('mail_template_tracker_id',
                    options_for_select([[l(:label_template_tracker_all), '']] + trackers.map { |t| [t.name, t.id] },
                                       @template.tracker_id),
-                   onchange: 'changeTemplate(); showFirstTab();') %>
+                   onchange: 'changeMailTemplate(); showMailTemplateFirstTab();') %>
   </p>
 
   <%= render_tabs(tabs) %>
@@ -56,7 +56,7 @@
   <% end %>
   ];
 
-  function changeNotifiableConfigured() {
+  function changeMailTemplateNotifiableConfigured() {
     let options = document.getElementById('mail_template_notifiable').querySelectorAll('option');
     for (let i = 0; i < options.length; i++) {
       options[i].style = null;
@@ -68,7 +68,7 @@
     }
   }
 
-  function changeTracker() {
+  function changeMailTemplateTracker() {
     let notifiable = document.getElementById('mail_template_notifiable').value;
 
     let tracker = document.getElementById('mail_template_tracker_id');
@@ -82,7 +82,7 @@
     }
   }
 
-  function changeTrackerConfigured() {
+  function changeMailTemplateTrackerConfigured() {
     let notifiable = document.getElementById('mail_template_notifiable').value;
     let options = document.getElementById('mail_template_tracker_id').querySelectorAll('option');
     for (let i = 0; i < options.length; i++) {
@@ -96,13 +96,10 @@
     }
   }
 
-  function changeTemplate() {
+  function changeMailTemplate() {
     let notifiable = document.getElementById('mail_template_notifiable').value;
 
-    let tracker_id = document.getElementById('mail_template_tracker_id').value;
-    if (!tracker_id) {
-      tracker_id = null;
-    }
+    let tracker_id = document.getElementById('mail_template_tracker_id').value || null;
 
     let template = document.getElementById('mail_template_template');
     template.value = '';
@@ -125,7 +122,7 @@
     }
   }
 
-  function showFirstTab() {
+  function showMailTemplateFirstTab() {
     // hide `tabs-buttons` explicitly because the first tab is in-visible.
     displayTabsButtons();
 
@@ -134,16 +131,16 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tab-mail_template').addEventListener('click', function() {
-      showFirstTab();
+      showMailTemplateFirstTab();
     });
 
-    changeNotifiableConfigured();
+    changeMailTemplateNotifiableConfigured();
 
-    changeTrackerConfigured();
+    changeMailTemplateTrackerConfigured();
 
-    changeTracker();
+    changeMailTemplateTracker();
 
     // nested tab does not work at first view.
-    showFirstTab();
+    showMailTemplateFirstTab();
   });
 </script>
