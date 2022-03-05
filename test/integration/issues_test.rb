@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'test_after_commit' if ActiveRecord::VERSION::MAJOR < 5
 require File.expand_path('../../test_helper', __FILE__)
 
 class IssuesTest < Redmine::IntegrationTest
@@ -82,15 +83,16 @@ class IssuesTest < Redmine::IntegrationTest
   def test_issue_edit
     log_user('admin', 'admin')
 
-    put(
-      '/issues/2',
-      params: {
-        issue: {
-          subject: "test issue",
-        }
-      })
+    put_issue_edit do
+      put(
+        '/issues/2',
+        params: {
+          issue: {
+            subject: "test issue",
+          }
+        })
+    end
 
-    # FIXME: 0 at test only in Redmine3
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
@@ -100,16 +102,27 @@ class IssuesTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    put(
-      '/issues/2',
-      params: {
-        issue: {
-          subject: "test issue",
-        }
-      })
+    put_issue_edit do
+      put(
+        '/issues/2',
+        params: {
+          issue: {
+            subject: "test issue",
+          }
+        })
+    end
 
-    # FIXME: 0 at test only in Redmine3
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
+  end
+
+  def put_issue_edit
+    if ActiveRecord::VERSION::MAJOR >= 5
+      yield
+    else
+      TestAfterCommit.with_commits(true) do
+        yield
+      end
+    end
   end
 end
