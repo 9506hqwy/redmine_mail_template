@@ -17,6 +17,9 @@ module RedmineMailTemplate
         return @message.project
       elsif @wiki_content
         return @wiki_content.project
+      elsif @text && @project
+        # for redmine_wiki_extensions
+        return @project
       end
 
       nil
@@ -66,6 +69,9 @@ module RedmineMailTemplate
         else
           'wiki_content_updated'
         end
+      elsif @text && @project
+        # for redmine_wiki_extensions
+        'wiki_comment_added'
       else
         nil
       end

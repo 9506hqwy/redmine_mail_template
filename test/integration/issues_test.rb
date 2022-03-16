@@ -116,13 +116,11 @@ class IssuesTest < Redmine::IntegrationTest
     assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
   end
 
-  def put_issue_edit
+  def put_issue_edit(&block)
     if ActiveRecord::VERSION::MAJOR >= 5
       yield
     else
-      TestAfterCommit.with_commits(true) do
-        yield
-      end
+      TestAfterCommit.with_commits(true, &block)
     end
   end
 end
