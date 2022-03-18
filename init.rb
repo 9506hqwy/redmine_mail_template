@@ -10,7 +10,7 @@ Redmine::Plugin.register :redmine_mail_template do
   name 'Redmine Mail Template plugin'
   author '9506hqwy'
   description 'This is a mail template plugin for Redmine'
-  version '0.1.0'
+  version '0.2.0'
   url 'https://github.com/9506hqwy/redmine_mail_template'
   author_url 'https://github.com/9506hqwy'
 
