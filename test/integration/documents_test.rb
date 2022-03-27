@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DocumentsTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :documents,
@@ -31,16 +32,18 @@ class DocumentsTest < Redmine::IntegrationTest
   def test_document_add
     log_user('admin', 'admin')
 
-    new_record(Document) do
-      post(
-        '/projects/ecookbook/documents',
-        params: {
-          document: {
-            title: 'test',
-            description: 'test',
-            category_id: "1",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Document) do
+        post(
+          '/projects/ecookbook/documents',
+          params: {
+            document: {
+              title: 'test',
+              description: 'test',
+              category_id: "1",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -53,16 +56,18 @@ class DocumentsTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(Document) do
-      post(
-        '/projects/ecookbook/documents',
-        params: {
-          document: {
-            title: 'test',
-            description: 'test',
-            category_id: "1",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Document) do
+        post(
+          '/projects/ecookbook/documents',
+          params: {
+            document: {
+              title: 'test',
+              description: 'test',
+              category_id: "1",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -77,16 +82,18 @@ class DocumentsTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(Document) do
-      post(
-        '/projects/ecookbook/documents',
-        params: {
-          document: {
-            title: 'test',
-            description: 'test',
-            category_id: "1",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Document) do
+        post(
+          '/projects/ecookbook/documents',
+          params: {
+            document: {
+              title: 'test',
+              description: 'test',
+              category_id: "1",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -104,16 +111,18 @@ class DocumentsTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(Document) do
-      post(
-        '/projects/ecookbook/documents',
-        params: {
-          document: {
-            title: 'test',
-            description: 'test',
-            category_id: "1",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Document) do
+        post(
+          '/projects/ecookbook/documents',
+          params: {
+            document: {
+              title: 'test',
+              description: 'test',
+              category_id: "1",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length

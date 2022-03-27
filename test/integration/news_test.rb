@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class NewssTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :comments,
@@ -37,16 +38,18 @@ class NewssTest < Redmine::IntegrationTest
   def test_news_add
     log_user('admin', 'admin')
 
-    new_record(News) do
-      post(
-        '/projects/ecookbook/news',
-        params: {
-          news: {
-            title: 'test',
-            description: 'test',
-            summary: "test",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(News) do
+        post(
+          '/projects/ecookbook/news',
+          params: {
+            news: {
+              title: 'test',
+              description: 'test',
+              summary: "test",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -58,16 +61,18 @@ class NewssTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(News) do
-      post(
-        '/projects/ecookbook/news',
-        params: {
-          news: {
-            title: 'test',
-            description: 'test',
-            summary: "test",
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(News) do
+        post(
+          '/projects/ecookbook/news',
+          params: {
+            news: {
+              title: 'test',
+              description: 'test',
+              summary: "test",
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -77,13 +82,15 @@ class NewssTest < Redmine::IntegrationTest
   def test_news_comment_add
     log_user('admin', 'admin')
 
-    post(
-      '/news/1/comments',
-      params: {
-        comment: {
-          comments: "test",
-        },
-      })
+    perform_enqueued_jobs do
+      post(
+        '/news/1/comments',
+        params: {
+          comment: {
+            comments: "test",
+          },
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
@@ -94,13 +101,15 @@ class NewssTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    post(
-      '/news/1/comments',
-      params: {
-        comment: {
-          comments: "test",
-        },
-      })
+    perform_enqueued_jobs do
+      post(
+        '/news/1/comments',
+        params: {
+          comment: {
+            comments: "test",
+          },
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded

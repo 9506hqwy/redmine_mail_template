@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class SettingsTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :email_addresses,
@@ -17,13 +18,15 @@ class SettingsTest < Redmine::IntegrationTest
   def test_password
     log_user('admin', 'admin')
 
-    post(
-      '/settings/edit',
-      params: {
-        settings: {
-          login_required: 1,
-        },
-      })
+    perform_enqueued_jobs do
+      post(
+        '/settings/edit',
+        params: {
+          settings: {
+            login_required: 1,
+          },
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length

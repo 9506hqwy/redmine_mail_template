@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class AdminTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :email_addresses,
@@ -17,7 +18,9 @@ class AdminTest < Redmine::IntegrationTest
   def test_test_email
     log_user('admin', 'admin')
 
-    post('/admin/test_email')
+    perform_enqueued_jobs do
+      post('/admin/test_email')
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length

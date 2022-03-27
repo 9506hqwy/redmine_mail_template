@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class MessagesTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :boards,
@@ -32,15 +33,17 @@ class MessagesTest < Redmine::IntegrationTest
   def test_message_posted
     log_user('admin', 'admin')
 
-    new_record(Message) do
-      post(
-        '/boards/1/topics/new',
-        params: {
-          message: {
-            subject: 'test',
-            content: 'test',
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Message) do
+        post(
+          '/boards/1/topics/new',
+          params: {
+            message: {
+              subject: 'test',
+              content: 'test',
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -52,15 +55,17 @@ class MessagesTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(Message) do
-      post(
-        '/boards/1/topics/new',
-        params: {
-          message: {
-            subject: 'test',
-            content: 'test',
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(Message) do
+        post(
+          '/boards/1/topics/new',
+          params: {
+            message: {
+              subject: 'test',
+              content: 'test',
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length

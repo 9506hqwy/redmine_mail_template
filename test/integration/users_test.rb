@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class UsersTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :email_addresses,
@@ -21,14 +22,16 @@ class UsersTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    put(
-      '/users/2',
-      params: {
-        user: {
-          password: nil,
-          status: User::STATUS_ACTIVE,
-        },
-      })
+    perform_enqueued_jobs do
+      put(
+        '/users/2',
+        params: {
+          user: {
+            password: nil,
+            status: User::STATUS_ACTIVE,
+          },
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length
@@ -39,14 +42,16 @@ class UsersTest < Redmine::IntegrationTest
   def test_account_infomration
     log_user('admin', 'admin')
 
-    put(
-      '/users/2',
-      params: {
-        send_information: true,
-        user: {
-          password: nil,
-        },
-      })
+    perform_enqueued_jobs do
+      put(
+        '/users/2',
+        params: {
+          send_information: true,
+          user: {
+            password: nil,
+          },
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length

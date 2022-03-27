@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class WikiTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :email_addresses,
@@ -45,14 +46,16 @@ class WikiTest < Redmine::IntegrationTest
   def test_wiki_content_added
     log_user('admin', 'admin')
 
-    new_record(WikiContent) do
-      put(
-        '/projects/ecookbook/wiki/Wiki',
-        params: {
-          content: {
-            text: "wiki content"
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(WikiContent) do
+        put(
+          '/projects/ecookbook/wiki/Wiki',
+          params: {
+            content: {
+              text: "wiki content"
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -64,14 +67,16 @@ class WikiTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    new_record(WikiContent) do
-      put(
-        '/projects/ecookbook/wiki/Wiki',
-        params: {
-          content: {
-            text: "wiki content"
-          }
-        })
+    perform_enqueued_jobs do
+      new_record(WikiContent) do
+        put(
+          '/projects/ecookbook/wiki/Wiki',
+          params: {
+            content: {
+              text: "wiki content"
+            }
+          })
+      end
     end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
@@ -81,13 +86,15 @@ class WikiTest < Redmine::IntegrationTest
   def test_wiki_content_updated
     log_user('admin', 'admin')
 
-    put(
-      '/projects/ecookbook/wiki/CookBook_documentation',
-      params: {
-        content: {
-          text: "wiki content"
-        }
-      })
+    perform_enqueued_jobs do
+      put(
+        '/projects/ecookbook/wiki/CookBook_documentation',
+        params: {
+          content: {
+            text: "wiki content"
+          }
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
@@ -98,13 +105,15 @@ class WikiTest < Redmine::IntegrationTest
 
     log_user('admin', 'admin')
 
-    put(
-      '/projects/ecookbook/wiki/CookBook_documentation',
-      params: {
-        content: {
-          text: "wiki content"
-        }
-      })
+    perform_enqueued_jobs do
+      put(
+        '/projects/ecookbook/wiki/CookBook_documentation',
+        params: {
+          content: {
+            text: "wiki content"
+          }
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
@@ -121,12 +130,14 @@ class WikiTest < Redmine::IntegrationTest
 
     log_user('jsmith', 'jsmith')
 
-    post(
-      '/projects/ecookbook/wiki_extensions/add_comment',
-      params: {
-        wiki_page_id: page.id,
-        comment: 'test comment',
-      })
+    perform_enqueued_jobs do
+      post(
+        '/projects/ecookbook/wiki_extensions/add_comment',
+        params: {
+          wiki_page_id: page.id,
+          comment: 'test comment',
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_not_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded
@@ -144,12 +155,14 @@ class WikiTest < Redmine::IntegrationTest
 
     log_user('jsmith', 'jsmith')
 
-    post(
-      '/projects/ecookbook/wiki_extensions/add_comment',
-      params: {
-        wiki_page_id: page.id,
-        comment: 'test comment',
-      })
+    perform_enqueued_jobs do
+      post(
+        '/projects/ecookbook/wiki_extensions/add_comment',
+        params: {
+          wiki_page_id: page.id,
+          comment: 'test comment',
+        })
+    end
 
     assert_not_equal 0, ActionMailer::Base.deliveries.length
     assert_equal @template.template, ActionMailer::Base.deliveries[0].body.encoded

@@ -3,6 +3,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class AccountTest < Redmine::IntegrationTest
+  include ActiveJob::TestHelper
   include Redmine::I18n
 
   fixtures :email_addresses,
@@ -17,18 +18,20 @@ class AccountTest < Redmine::IntegrationTest
   def test_account_activation_request
     Setting.self_registration = '2'
 
-    post(
-      '/account/register',
-      params: {
-        user: {
-          login: 'newuser',
-          firstname: 'new',
-          lastname: 'user',
-          mail: 'newuser@somenet.foo',
-          password: 'newpass123',
-          password_confirmation: 'newpass123',
-        },
-      })
+    perform_enqueued_jobs do
+      post(
+        '/account/register',
+        params: {
+          user: {
+            login: 'newuser',
+            firstname: 'new',
+            lastname: 'user',
+            mail: 'newuser@somenet.foo',
+            password: 'newpass123',
+            password_confirmation: 'newpass123',
+          },
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length
@@ -37,11 +40,13 @@ class AccountTest < Redmine::IntegrationTest
   end
 
   def test_lost_password
-    post(
-      '/account/lost_password',
-      params: {
-        mail: 'jsmith@somenet.foo',
-      })
+    perform_enqueued_jobs do
+      post(
+        '/account/lost_password',
+        params: {
+          mail: 'jsmith@somenet.foo',
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length
@@ -52,18 +57,20 @@ class AccountTest < Redmine::IntegrationTest
   def test_register
     Setting.self_registration = '1'
 
-    post(
-      '/account/register',
-      params: {
-        user: {
-          login: 'newuser',
-          firstname: 'new',
-          lastname: 'user',
-          mail: 'newuser@somenet.foo',
-          password: 'newpass123',
-          password_confirmation: 'newpass123',
-        },
-      })
+    perform_enqueued_jobs do
+      post(
+        '/account/register',
+        params: {
+          user: {
+            login: 'newuser',
+            firstname: 'new',
+            lastname: 'user',
+            mail: 'newuser@somenet.foo',
+            password: 'newpass123',
+            password_confirmation: 'newpass123',
+          },
+        })
+    end
 
     assert_equal 1, ActionMailer::Base.deliveries.length
     assert_equal 1, ActionMailer::Base.deliveries[0].to.length
