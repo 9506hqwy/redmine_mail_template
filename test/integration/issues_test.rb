@@ -19,6 +19,7 @@ class IssuesTest < Redmine::IntegrationTest
            :roles,
            :users,
            :trackers,
+           :versions,
            :watchers
 
   def setup
