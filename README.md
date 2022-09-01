@@ -8,7 +8,11 @@ This plugin provides a mail body customization method per project.
    ```sh
    git clone https://github.com/9506hqwy/redmine_mail_template.git
    ```
-2. Start Redmine
+2. Install plugin in Redmine directory.
+   ```sh
+   bundle exec rake redmine:plugins:migrate NAME=redmine_mail_template RAILS_ENV=production
+   ```
+3. Start Redmine
 
 ## Configuration
 
