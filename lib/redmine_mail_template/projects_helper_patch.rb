@@ -40,7 +40,9 @@ module RedmineMailTemplate
 end
 
 if ActiveSupport::VERSION::MAJOR >= 5
-  ProjectsHelper.prepend RedmineMailTemplate::ProjectsHelperPatch5
+  Rails.application.config.after_initialize do
+    ProjectsController.send(:helper, RedmineMailTemplate::ProjectsHelperPatch5)
+  end
 else
   ProjectsHelper.include RedmineMailTemplate::ProjectsHelperPatch4
 end
