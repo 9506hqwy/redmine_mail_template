@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MailTemplate < ActiveRecord::Base
+class MailTemplate < RedmineMailTemplate::Utils::ModelBase
   belongs_to :project
   belongs_to :tracker
 
