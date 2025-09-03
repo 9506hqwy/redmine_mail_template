@@ -5,13 +5,17 @@ This plugin provides a mail body customization method per project.
 ## Installation
 
 1. Download plugin in Redmine plugin directory.
+
    ```sh
    git clone https://github.com/9506hqwy/redmine_mail_template.git
    ```
+
 2. Install plugin in Redmine directory.
+
    ```sh
    bundle exec rake redmine:plugins:migrate NAME=redmine_mail_template RAILS_ENV=production
    ```
+
 3. Start Redmine
 
 ## Configuration
@@ -42,18 +46,17 @@ This plugin provides a mail body customization method per project.
 
 ## Tested Environment
 
-* Redmine (Docker Image)
-  * 3.4
-  * 4.0
-  * 4.1
-  * 4.2
-  * 5.0
-  * 5.1
-  * 6.0
-* Database
-  * SQLite
-  * MySQL 5.7 or 8.0
-  * PostgreSQL 12
+- Redmine (Docker Image)
+  - 4.0
+  - 4.1
+  - 4.2
+  - 5.0
+  - 5.1
+  - 6.0
+- Database
+  - SQLite
+  - MySQL 5.7 or 8.0
+  - PostgreSQL 14
 
 ## References
 
