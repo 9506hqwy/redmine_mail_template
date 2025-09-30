@@ -53,6 +53,7 @@ This plugin provides a mail body customization method per project.
   - 5.0
   - 5.1
   - 6.0
+  - 6.1
 - Database
   - SQLite
   - MySQL 5.7 or 8.0
